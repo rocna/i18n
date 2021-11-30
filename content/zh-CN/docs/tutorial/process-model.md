@@ -10,7 +10,7 @@ Electron 继承了来自 Chromium 的多进程架构，这使得此框架在架�
 
 ## 多进程模型
 
-为了解决这个问题，Chrome 团队决定让每个标签页在自己的进程中渲染， 从而限制了一个网页上的有误或恶意代码可能导致的对整个应用程序造成的伤害。 然后用单个浏览器进程控制这些標籤頁进程，以及整个应用程序的生命周期。 下方来自 [Chrome 漫画][] 的图表可视化了此模型：
+为了解决这个问题，Chrome 团队决定让每个标签页在自己的进程中渲染， 从而限制了一个网页上的有误或恶意代码可能导致的对整个应用程序造成的伤害。 然后用单个浏览器进程控制这些标签页进程，以及整个应用程序的生命周期。 下方来自 [Chrome 漫画][] 的图表可视化了此模型：
 
 ![Chrome的多进程架构](../images/chrome-processes.png)
 
@@ -100,7 +100,7 @@ const win = new BrowserWindow({
 
 由于预加载脚本与渲染器共享同一个全局 [`Window`][window-mdn] 接口，并且可以访问 Node.js API，因此它通过在 `window` 全局中暴露任意您的网络内容可以随后使用的 API 来增强渲染器。
 
-虽然预加载脚本与其所附加的渲染器在全局共享着一个 `window` 变数，但您并不能从中直接附加任何变数到 `window` 之中，因为 [`contextIsolation`][context-isolation] 是默认的。
+虽然预加载脚本与其所附加的渲染器在全局共享着一个 `window` 变量，但您并不能从中直接附加任何变量到 `window` 之中，因为 [`contextIsolation`][context-isolation] 是默认的。
 
 ```js title='preload.js'
 window.myAPI = {
@@ -113,7 +113,7 @@ console.log(window.myAPI)
 // => undefined
 ```
 
-语境隔离（Context Isolation）意味着预加载脚本与渲染器的主要运行环境是隔离开来的，以避免泄漏任何具特权的 API 到您的网页内容代码中。
+语境隔离（`Context Isolation`）意味着预加载脚本与渲染器的主要运行环境是隔离开来的，以避免泄漏任何具特权的 API 到您的网页内容代码中。
 
 取而代之，我们將使用 [`contextBridge`][context-bridge] 模块来安全地实现交互：
 
@@ -130,10 +130,10 @@ console.log(window.myAPI)
 // => { desktop: true }
 ```
 
-此功能对两个主要目的來說非常有用：
+此功能对下面两个主要目的来说非常有用：
 
-* 通过暴露 [`ipcRenderer`][ipcRenderer] 帮手模块于渲染器中，您可以使用 进程间通讯 ( inter-process communication, IPC ) 来从渲染器触发主进程任务 ( 反之亦然 ) 。
-* 如果您正在为远程 URL 上托管的现有 web 应用开发 Electron 封裝，则您可在渲染器的 `window` 全局变量上添加自定义的属性，好在 web 客户端用上仅适用于桌面应用的设计逻辑 。
+* 通过暴露 [`ipcRenderer`][ipcRenderer] 帮手给渲染器，您可以使用进程间通讯 ( `inter-process communication, IPC` ) 来从渲染器触发主进程任务 ( 反之亦然 ) 。
+* 如果您正在为远程 URL 上托管的现有 web 应用开发 Electron 封裝，则您可在渲染器的 `window` 全局变量上添加自定义的属性，这些属性可适用于仅限桌面的逻辑 Web 客户端。
 
 [快速启动应用]: ./quick-start.md
 
